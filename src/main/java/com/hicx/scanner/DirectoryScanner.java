@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 @Slf4j
 public class DirectoryScanner {
@@ -27,20 +28,21 @@ public class DirectoryScanner {
 
     public void scan(Consumer<ScannerItem> consumer) throws IOException {
         log.debug("Started scanning {}", dir.toAbsolutePath());
-        Files.list(dir)
-                .parallel()
-                .filter(Files::isRegularFile)
-                .map(FileSystemResource::new)
-                .map(FileSystemScannerItem::new)
-                .peek(consumer)
-                .filter(ScannerItem::isProcessed)
-                .map(FileSystemScannerItem::getResource)
-                .forEach(this::moveToProcessed);
+        try (Stream<Path> pathStream = Files.list(dir)) {
+            pathStream.parallel()
+                    .filter(Files::isRegularFile)
+                    .map(FileSystemResource::new)
+                    .map(FileSystemScannerItem::new)
+                    .peek(consumer)
+                    .filter(ScannerItem::isProcessed)
+                    .map(FileSystemScannerItem::getResource)
+                    .forEach(this::moveToProcessed);
+        }
         log.debug("Scan finished");
     }
 
     @SneakyThrows
-    void moveToProcessed(FileSystemResource fileSystemResource){
+    void moveToProcessed(FileSystemResource fileSystemResource) {
         log.debug("Moving {} file to {} directory", fileSystemResource.getFilename(), processedDir);
         Files.move(fileSystemResource.getFile().toPath(), processedDir.resolve(fileSystemResource.getFilename()));
     }
