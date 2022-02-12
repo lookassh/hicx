@@ -1,0 +1,79 @@
+@startuml
+class MostUsedWordStatistic {
+- Map<String,Long> wordsMap
++ void visit(StringBatchData)
++ Optional<String> getMostUsedWord()
+}
+class ReaderFactory {
++ Optional<Reader> createResourceReader(Resource)
+}
+class StringOccurrenceStatistic {
+- String sub
+- long count
++ void visit(StringBatchData)
+}
+interface BatchVisitor {
+~ void visit(StringBatchData)
+}
+class AnalyseFileJob {
+- ReaderFactory readerFactory
+- Path scanDirectory
++ void run()
+}
+class DirectoryScanner {
++ {static} String PROCESSED
+- Path dir
+- Path processedDir
++ void scan(Consumer<ScannerItem>)
+~ void moveToProcessed(FileSystemResource)
+}
+class FileSystemScannerItem {
+- FileSystemResource resource
+- boolean processed
++ FileSystemResource getResource()
++ void markAsProcessed()
++ boolean isProcessed()
+}
+interface Reader {
+~ void readInBatches(Consumer<BatchData>)
+}
+class TextReader {
+- Resource resource
+- Charset charset
++ void readInBatches(Consumer<BatchData>)
+}
+interface BatchData {
+~ void accept(BatchVisitor)
+}
+class NumOfWordsStatistic {
+- long count
++ void visit(StringBatchData)
+}
+class StringBatchData {
+~ String line
++ void accept(BatchVisitor)
+}
+interface ScannerItem {
+~ Resource getResource()
+~ void markAsProcessed()
+~ boolean isProcessed()
+}
+
+
+BatchVisitor <|.. MostUsedWordStatistic
+BatchVisitor <|.. StringOccurrenceStatistic
+ScannerItem <|.. FileSystemScannerItem
+Reader <|.. TextReader
+BatchVisitor <|.. NumOfWordsStatistic
+BatchData <|.. StringBatchData
+BatchData ..> BatchVisitor
+
+AnalyseFileJob o-- ReaderFactory
+AnalyseFileJob o-- DirectoryScanner
+
+Reader ..> BatchData
+
+DirectoryScanner --> ScannerItem
+AnalyseFileJob ..> Reader
+
+@enduml

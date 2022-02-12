@@ -1,0 +1,32 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+autoactivate on
+
+Scheduler -> AnalyseFileJob: triggers
+AnalyseFileJob -> DirectoryScanner: scan directory
+return: file data.txt detected
+AnalyseFileJob -> ReaderFactory: create reader for data.txt
+ReaderFactory -> TextReader **: create
+return reader created
+AnalyseFileJob -> TextReader: read in batches
+    loop number of lines
+        TextReader -> MostUsedWordStatistic: analyse line
+        return
+        TextReader -> NumOfWordsStatistic: analyse line
+        return
+        TextReader -> DotsOccurrenceStatistic: analyse line
+        return
+    end
+return: read finished
+AnalyseFileJob -> MostUsedWordStatistic: get results
+return: most used word
+AnalyseFileJob -> NumOfWordsStatistic
+return: number of dots
+AnalyseFileJob -> DotsOccurrenceStatistic
+return: number of dots
+AnalyseFileJob -> AnalyseFileJob: print results
+deactivate AnalyseFileJob
+return
+@enduml

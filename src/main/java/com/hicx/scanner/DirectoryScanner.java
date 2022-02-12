@@ -28,6 +28,7 @@ public class DirectoryScanner {
     public void scan(Consumer<ScannerItem> consumer) throws IOException {
         log.debug("Started scanning {}", dir.toAbsolutePath());
         Files.list(dir)
+                .parallel()
                 .filter(Files::isRegularFile)
                 .map(FileSystemResource::new)
                 .map(FileSystemScannerItem::new)

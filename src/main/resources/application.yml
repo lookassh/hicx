@@ -1,5 +1,5 @@
 scan:
-  directory: tmp
+  directory: data
   fixed-delay: 1000
 
 logging:

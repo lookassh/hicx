@@ -22,7 +22,6 @@ public class AnalyseFileJob {
     public AnalyseFileJob(ReaderFactory readerFactory, @Value("${scan.directory}") Path scanDirectory) {
         this.readerFactory = readerFactory;
         this.scanDirectory = scanDirectory;
-
     }
 
     @Scheduled(fixedDelayString = "${scan.fixed-delay}")
