@@ -82,6 +82,7 @@ BatchData ..> BatchVisitor
 
 AnalyseFileJob o-- ReaderFactory
 AnalyseFileJob o-- DirectoryScanner
+AnalyseFileJob o-- Statistic
 
 Reader ..> BatchData
 
