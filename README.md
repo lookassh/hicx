@@ -15,6 +15,7 @@ Java 14 is required to run application
 java -jar hicx.jar --scan.directory=<scanDirectory>
 ```
 --scan.directory - is path to root directory with your files to scan
+
 --scan.fixed-delay - (optional, default 1000) time in milis between directory scan
 
 ### Example
