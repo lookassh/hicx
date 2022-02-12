@@ -3,10 +3,12 @@ package com.hicx.stat;
 import com.hicx.batch.BatchVisitor;
 import com.hicx.batch.StringBatchData;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
-public class MostUsedWordStatistic implements BatchVisitor {
+@Slf4j
+public class MostUsedWordStatistic implements Statistic {
 
     private final Map<String, Long> wordsMap = new HashMap<>();
 
@@ -23,6 +25,11 @@ public class MostUsedWordStatistic implements BatchVisitor {
         return wordsMap.entrySet().stream()
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey);
+    }
+
+    @Override
+    public void print() {
+        log.info("Most used word: {}", getMostUsedWord().orElse(""));
     }
 
 }

@@ -1,4 +1,14 @@
 @startuml
+interface Statistic {
+}
+interface Printable {
+~ void print()
+}
+class CompositeStatistic {
+- List<Statistic> statistics
++ void visit(StringBatchData)
++ void print()
+}
 class MostUsedWordStatistic {
 - Map<String,Long> wordsMap
 + void visit(StringBatchData)
@@ -59,12 +69,14 @@ interface ScannerItem {
 ~ boolean isProcessed()
 }
 
-
-BatchVisitor <|.. MostUsedWordStatistic
-BatchVisitor <|.. StringOccurrenceStatistic
+BatchVisitor <|-- Statistic
+Printable <|-- Statistic
+Statistic <|.. MostUsedWordStatistic
+Statistic <|.. StringOccurrenceStatistic
+Statistic <|.. NumOfWordsStatistic
+Statistic <|.. CompositeStatistic
 ScannerItem <|.. FileSystemScannerItem
 Reader <|.. TextReader
-BatchVisitor <|.. NumOfWordsStatistic
 BatchData <|.. StringBatchData
 BatchData ..> BatchVisitor
 

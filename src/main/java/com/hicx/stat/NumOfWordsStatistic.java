@@ -4,11 +4,13 @@ import com.hicx.batch.BatchVisitor;
 import com.hicx.batch.StringBatchData;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 
-public class NumOfWordsStatistic implements BatchVisitor {
+@Slf4j
+public class NumOfWordsStatistic implements Statistic {
 
     @Getter
     private long count = 0;
@@ -18,6 +20,11 @@ public class NumOfWordsStatistic implements BatchVisitor {
         count += Arrays.stream(batchData.getLine().trim().split("\\s+"))
                 .filter(StringUtils::hasText)
                 .count();
+    }
+
+    @Override
+    public void print() {
+        log.info("Number of words: {}", count);
     }
 
 }
