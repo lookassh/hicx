@@ -1,0 +1,7 @@
+scan:
+  directory: tmp
+  fixed-delay: 1000
+
+logging:
+  level:
+    com.hicx: debug

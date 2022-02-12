@@ -1,0 +1,9 @@
+Update: Starting with Spring Boot v1.2.0.RELEASE, the settings in application.properties or application.yml do apply. See the Log Levels section of the reference guide.
+
+logging.level.org.springframework.web: DEBUG
+logging.level.org.hibernate: ERROR
+For earlier versions of Spring Boot you cannot. You simply have to use the normal configuration for your logging framework (log4j, logback) for that. Add the appropriate config file (log4j.xml or logback.xml) to the src/main/resources directory and configure to your liking.
+
+You can enable debug logging by specifying --debug when starting the application from the command-line.
+
+Spring Boot provides also a nice starting point for logback to configure some defaults, coloring etc. the base.xml file which you can simply include in your logback.xml file. (This is also recommended from the default logback.xml in Spring Boot.
